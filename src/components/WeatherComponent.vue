@@ -1,22 +1,22 @@
 <template>
 <div class="container">
     <div class="my-container">
-        <div class=" row my-row">
-            <div class="col my-col">
+        <div class=" row">
+            <div class="col border border-primary text-primary">
                     <div>
-                        <p class="text-center"><b>Timezone: </b>{{forecast.timezone}}</p>
+                        <p class="text-center "><b>Timezone: </b>{{forecast.timezone}}</p>
                         <!-- <p class="text-center">Coordinates: lat: {{forecast.lat}} , lon: {{forecast.lon}}</p>                 -->                 
                     </div>
-                    <div class="text-center">
-                        <button @click="getForecast()" class="btn btn-primary">Update Forecast info</button>
+                    <div class="text-center p-2">
+                        <button @click="getForecast()" class="btn btn-primary bg-primary text-warning">Update Forecast info</button>
                     </div>
                     <div>                    
                         <p class="text-center"><span><b>Obtained on:</b> </span> {{getDateMethod().toLocaleString()}}</p>
                     </div>
             </div>
-        </div>
-        <div class="row my-row mt-1">
-            <div class="col-md-6 col-sm-12 my-col mb-1 mt-1">
+        </div> 
+        <div class="row border border-primary mt-1 text-primary">
+            <div class="col-md-6 col-sm-12 mb-1 mt-1">
               <div>
                   <div>
                       <h3>Maribor, Sl</h3>
@@ -25,9 +25,9 @@
                   <div>
                     <h3 class="text-center">Current temp: {{forecast.current.temp}} °</h3>
                   </div>
-                  <div class="text-center">
+                  <div class="text-center p-">
                     <!-- <img src="http://openweathermap.org/img/wn/04d@2x.png"> -->
-                    <img :src="'http://openweathermap.org/img/w/' + forecast.current.weather[0].icon + '.png' ">
+                    <img style="width:100px; height:100px" :src="'http://openweathermap.org/img/w/' + forecast.current.weather[0].icon + '.png' ">
                   </div>
                   <div>
                     <p class="text-center"><b>Description:</b> {{forecast.current.weather[0].main}}, {{forecast.current.weather[0].description}}.</p>
@@ -40,25 +40,24 @@
 
               </div>
             </div>
-            <div class="col-md-6 col-sm-12 my-col mb-1 mt-1">
-                <div v-for="index in 5" :key="index" class="row border">
+            <div class="col-md-6 col-sm-12">
+                <div v-for="index in 5" :key="index" class="row border border-primary">
                     <div class="col">
-                        <p class="text-center">{{(getDateMethod(forecast.daily[index-1].dt * 1000)).toDateString()}}</p>
+                        <p class="text-center p-1">{{new Date((forecast.daily[index-1].dt * 1000)).toDateString()}}</p>
                     </div>
                     <div class="col">
                         <span><img style="width:80px; height:80px" :src="'http://openweathermap.org/img/w/' + forecast.daily[index-1].weather[0].icon + '.png' "/></span>                       
                     </div>
                     <div class="col">
+                        <p class="m-1">
+                            <span>Min: {{Math.round(forecast.daily[index-1].temp.min)}} ° </span> 
+                        </p>
                         <p>
-                            <span>Min:{{Math.round(forecast.daily[index-1].temp.min)}} ° </span> 
+                            <span>Max: {{Math.round(forecast.daily[index-1].temp.max)}} °  </span>  
                         </p>
-                        <p class="">
-                            <span>Max:{{Math.round(forecast.daily[index-1].temp.max)}} °  </span>  
-                        </p>
-  
                     </div>
                     <div class="col">
-                        <p class=""><b>Description:</b> {{forecast.daily[index-1].weather[0].main}} </p>
+                        <p><b>Description:</b> {{forecast.daily[index-1].weather[0].main}} </p>
                     </div>
                 </div>
             </div>
@@ -78,6 +77,7 @@ export default {
             forecast: {}
         }
     },
+    //getting the data from API and saving it to forecast in data()
     methods: {
         getForecast(){
             fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=46.55&lon=15.64&units=metric&exclude=hourly,minutely&appid=7ca6e152197750c5f2ed06aa6d6c687c`)
@@ -100,14 +100,12 @@ export default {
 </script>
 
 <style scoped>
+* {
+    background-color:#b2cced;
+}
 .my-container{
-    margin:10%;
+padding:11%;
 }
-.my-row{
-    border:3px solid red;
-}
-.my-col{
-    border:3px dotted blue;
-}
+
 
 </style>

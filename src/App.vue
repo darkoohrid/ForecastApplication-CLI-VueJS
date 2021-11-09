@@ -1,7 +1,6 @@
-<template >
+<template>
   <Header></Header>
   <WeatherComponent></WeatherComponent>
-
 </template>
 
 <script>
@@ -16,8 +15,8 @@ export default {
 };
 </script>
 
-<style scoped>
-body{
-  background-color:rgb(245, 238, 238);
-}
+<style>
+body {
+    background-color: rgb(50, 107, 192)
+  }
 </style>
