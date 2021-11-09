@@ -9,3 +9,6 @@ API - https://api.openweathermap.org/data/2.5/onecall?lat=46.55&lon=15.64&units=
 1. Instead of “Maribor” as city, display the forecast for the user's current location. (also Implementing a Map reading coordinates from click can be interesting).
 2. Responsivness (bootstrap, scss, mediaqueries).
 3. Translate the application in real time using the i18n library. Export all the keys for later translation. The browser language should affect the display of the date format.
+
+Photo of current version:
+![weatherForecastAppPicture](https://user-images.githubusercontent.com/82602862/141020013-6229a680-ad85-48c2-a10b-8790dfc839b0.png)
