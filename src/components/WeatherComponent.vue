@@ -1,5 +1,6 @@
 <template>
-<div class="container">
+<Loader v-if="!forecast"></Loader >
+<div class="container" v-if="forecast">
     <div class="my-container">
         <div class=" row">
             <div class="col border border-primary text-primary">
@@ -37,7 +38,6 @@
                     <p><b>Pressure: </b>{{forecast.current.pressure}} hPa </p>
                     <p><b>Humidity: </b>{{forecast.current.humidity}} % </p>
                   </div>
-
               </div>
             </div>
             <div class="col-md-6 col-sm-12">
@@ -69,12 +69,14 @@
 </template>
 
 <script>
+import Loader from "./Loader.vue"
+
 export default {
     name:"WeatherComponent",
     data(){
         return {
             api_key: "7ca6e152197750c5f2ed06aa6d6c687c",
-            forecast: {}
+            forecast: null
         }
     },
     //getting the data from API and saving it to forecast in data()
@@ -89,13 +91,19 @@ export default {
             return new Date();
         },
     },
+    components: {
+        Loader
+    },
     computed:{
         
     },
     created(){
+    //setTimeout just to be able to see the loader longer, otherwise just this.getForecast();
+    setTimeout(() => {
         this.getForecast();
-        console.log(this.forecast);
+        }, 500);
     }
+    
 }
 </script>
 
