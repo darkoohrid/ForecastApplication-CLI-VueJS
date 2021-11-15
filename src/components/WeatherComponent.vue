@@ -3,25 +3,40 @@
 <div class="container" v-if="forecast">
     <div class="my-container">
         <div class=" row">
-            <div class="col border border-primary text-primary">
+            <div class="col border border-primary text-primary mt-3">
+                    <div class="text-center mt-2 mb-2">
+                        <span>Maribor coords: </span>
+                        <button @click="MariborDefaultCoordinates()" class="btn btn-sm btn-primary text-warning bg-primary">Get Coords</button>
+                    </div>
+                    <div class="form-row form-inline d-flex justify-content-center mt-2 mb-2">
+                        <label for="lat">Lat:</label>
+                        <input type="text" class="form-control col-sm-2 border-primary" id="lat" v-model="lat" placeholder="Enter lat">
+                        <label for="lon">Lon:</label>
+                        <input type="text" class="form-control border-primary col-sm-2" id="lon" v-model="lon" placeholder="Enter lon">
+                    </div>
+                    <div class="text-center">
+                        <button @click="getUserLocation()" class="btn btn-primary btn-sm bg-primary text-warning">Get my current location</button>
+                        <p><b>Timezone: </b>{{forecast.timezone}}</p>
+                        <!-- <p class="text-center">Coordinates: lat: {{forecast.lat}} , lon: {{forecast.lon}}</p>                 -->
+                    </div>
                     <div>
-                        <p class="text-center "><b>Timezone: </b>{{forecast.timezone}}</p>
-                        <!-- <p class="text-center">Coordinates: lat: {{forecast.lat}} , lon: {{forecast.lon}}</p>                 -->                 
-                    </div>
-                    <div class="text-center p-2">
-                        <button @click="getForecast()" class="btn btn-primary bg-primary text-warning">Update Forecast info</button>
-                    </div>
-                    <div>                    
-                        <p class="text-center"><span><b>Obtained on:</b> </span> {{getDateMethod().toLocaleString()}}</p>
+                        <div class="text-center">
+                            <button @click="updateForecast()" class="btn btn-primary bg-primary text-warning">Update Forecast</button>
+                        </div>
+                        <div>
+                            <p class="text-center"><span><b>Obtained on:</b> </span> {{getDateMethod().toLocaleString()}}</p>
+                        </div>
                     </div>
             </div>
-        </div> 
+        </div>
         <div class="row border border-primary mt-1 text-primary">
             <div class="col-md-6 col-sm-12 mb-1 mt-1">
               <div>
+                  <h5>
+                        <p class="text-center "><b>Timezone: </b>{{forecast.timezone}}</p>
+                  </h5>
                   <div>
-                      <h3>Maribor, Sl</h3>
-                      <p><span>{{getDateMethod().toDateString()}}</span></p>
+                      <p class="text-center"><span>{{getDateMethod().toDateString()}}</span></p>
                   </div>
                   <div>
                     <h3 class="text-center">Current temp: {{forecast.current.temp}} °</h3>
@@ -46,14 +61,14 @@
                         <p class="text-center p-1">{{new Date((forecast.daily[index-1].dt * 1000)).toDateString()}}</p>
                     </div>
                     <div class="col">
-                        <span><img style="width:80px; height:80px" :src="'http://openweathermap.org/img/w/' + forecast.daily[index-1].weather[0].icon + '.png' "/></span>                       
+                        <span><img style="width:80px; height:80px" :src="'http://openweathermap.org/img/w/' + forecast.daily[index-1].weather[0].icon + '.png' "/></span>
                     </div>
                     <div class="col">
                         <p class="m-1">
-                            <span>Min: {{Math.round(forecast.daily[index-1].temp.min)}} ° </span> 
+                            <span>Min: {{Math.round(forecast.daily[index-1].temp.min)}} ° </span>
                         </p>
                         <p>
-                            <span>Max: {{Math.round(forecast.daily[index-1].temp.max)}} °  </span>  
+                            <span>Max: {{Math.round(forecast.daily[index-1].temp.max)}} °  </span>
                         </p>
                     </div>
                     <div class="col">
@@ -63,7 +78,7 @@
             </div>
         </div>
     </div>
-</div>  
+</div>
 
 
 </template>
@@ -76,33 +91,52 @@ export default {
     data(){
         return {
             api_key: "7ca6e152197750c5f2ed06aa6d6c687c",
-            forecast: null
+            forecast: null,
+            lat:"46.55",
+            lon:"15.64"
         }
     },
     //getting the data from API and saving it to forecast in data()
     methods: {
         getForecast(){
-            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=46.55&lon=15.64&units=metric&exclude=hourly,minutely&appid=7ca6e152197750c5f2ed06aa6d6c687c`)
+            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${this.lat}&lon=${this.lon}&units=metric&exclude=hourly,minutely&appid=${this.api_key}`)
             .then(res => res.json())
             .then(data=>
-            this.forecast=data); 
+            this.forecast=data);
+        },
+        updateForecast(){
+            this.getForecast();
         },
         getDateMethod(){
             return new Date();
+        },
+        MariborDefaultCoordinates(){
+            this.lat="46.55",
+            this.lon="15.64"
+        },
+        getUserLocation(){
+            var currObj = this;
+            if (navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(function(position){
+                currObj.lat = position.coords.latitude;
+                currObj.lon = position.coords.longitude;
+                })
+            } 
+            else alert("Geolocation is not supported by this browser");
         },
     },
     components: {
         Loader
     },
     computed:{
-        
+
     },
     created(){
     //setTimeout just to be able to see the loader longer, otherwise just this.getForecast();
     setTimeout(() => {
         this.getForecast();
         }, 500);
-    }
+    },
     
 }
 </script>
